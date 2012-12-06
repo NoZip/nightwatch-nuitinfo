@@ -48,7 +48,8 @@ class ApiHandler(RequestHandler):
         self.response.status = 201
     
     def put(self):
-        map_marker = MapMarker.fromXML(self.body)
+        element = ElementTree.fromstring(self.request.body)
+        map_marker = MapMarker.from_element(element)
         map_marker.put()
         
         self.response.status = 201

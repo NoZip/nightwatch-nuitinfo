@@ -16,6 +16,7 @@
 #
 import webapp2
 from api.handler import ApiHandler
+from api.test_handler import TestAddHandler, TestListHandler
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -24,4 +25,6 @@ class MainHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/api', ApiHandler),
+    ('/api/add/<name:.+>', TestAddHandler),
+    ('/api/list', TestListHandler),
 ], debug=True)
