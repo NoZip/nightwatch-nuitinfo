@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ElementTree
 
 from webapp2 import RequestHandler
 
-from models.mapmarker import MapMarcker
+from api.models.mapmarker import MapMarker
 
 def get_map_markers_by_zone(longitude, latitude, radius, limit=50):
     query = Node.all()
@@ -23,7 +23,7 @@ class ApiHandler(RequestHandler):
           longitude = self.GET['longitude']
           latitude = self.GET['latitude']
           radius = self.GET['radius']
-        except Keyerror as e:
+        except KeyError as e:
           self.response.status = 404
           return
           

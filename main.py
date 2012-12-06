@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 import webapp2
-import api
+from api.handler import ApiHandler
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -23,5 +23,5 @@ class MainHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/api', api.ApiHandler),
+    ('/api', ApiHandler),
 ], debug=True)
