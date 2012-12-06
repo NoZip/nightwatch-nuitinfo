@@ -20,14 +20,14 @@ def get_map_markers_by_zone(longitude, latitude, radius, limit=50):
 class ApiHandler(RequestHandler):
     def get(self):
         try:
-          longitude = self.GET['longitude']
-          latitude = self.GET['latitude']
-          radius = self.GET['radius']
+          longitude = self.request.GET['longitude']
+          latitude = self.request.GET['latitude']
+          radius = self.request.GET['radius']
         except KeyError as e:
           self.response.status = 404
           return
           
-        limit = self.GET.get('limit', 50)
+        limit = self.request.GET.get('limit', 50)
         
         root = ElementTree.Element("root")
         
@@ -38,7 +38,7 @@ class ApiHandler(RequestHandler):
     
     def post(self):
         try:
-          map_marker = MapMarker(self.POST)
+          map_marker = MapMarker(self.request.POST)
         except KeyError as e:
           self.response.status = 404
           return
