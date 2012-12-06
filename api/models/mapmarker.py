@@ -14,14 +14,14 @@ class MapMarker(db.Model):
 		Populates the instance data,
 		using a dictionnary given as a parameter.
 		"""
-		name = data['name']
-		coordinates = data['coordinates']
+		self.name = data['name']
+		self.coordinates = data['coordinates']
 
-	def element():
+	def to_element():
 		"""
 		Returns an element representation of the instance data.
 		"""
 		element = ET.Element('Marker')
-		ET.SubElement(element,'name').text = name
-		ET.SubElement(element,'coordinates').text = coordinates
+		ET.SubElement(element,'name').text = self.name
+		ET.SubElement(element,'coordinates').text = self.coordinates
 		return element
