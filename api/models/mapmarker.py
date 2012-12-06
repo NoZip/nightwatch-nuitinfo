@@ -8,6 +8,12 @@ class MapMarker(db.Model):
 	"""
 	name = db.StringProperty()
 	coordinates = db.GeoPtProperty()
+	url = db.StringProperty()
+	summary = db.StringProperty(multiline=True)
+	adress = db.StringProperty(multiline=True)
+	img_url = db.StringProperty
+	category = db.StringProperty
+
 
 	def __init__(self,data=None):
 		"""
@@ -15,10 +21,15 @@ class MapMarker(db.Model):
 		using a dictionnary given as a parameter.
 		"""
 		if data:
-			self.name = data['name']
 			latitude = data['y_lat']
 			longitude = data['x_long']
-			self.coordinates = db.GeoPt(lat=latitude, lon=longitude)
+			super(MapMarker,self).__init__( name = data['name'],
+											coordinates = db.GeoPt(lat=latitude, lon=longitude),
+											url = data.get('url', None),
+											summary = data.get('summary', None),
+											adress = data.get('adress', None),
+											img_url = data.get('img_url', None),
+											category = data.get('category', None))
 
 	def to_element():
 		"""
@@ -28,6 +39,14 @@ class MapMarker(db.Model):
 		ET.SubElement(element,'name').text = self.name
 		ET.SubElement(element,'x_long').text = self.coordinates.lon
 		ET.SubElement(element,'y_lat').text = self.coordinates.lat
+		for key, prop in self.properties().iteritems():
+			if prop and key not in ('name','coordinates'):
+				ET.SubElement(element, str(key)).text = prop
+			# ET.SubElement(element,'url').text = self.url
+			# ET.SubElement(element,'summary').text = self.summary
+			# ET.SubElement(element,'adress').text = self.adress
+			# ET.SubElement(element,'img_url').text = self.img_url
+			# ET.SubElement(element,'category').text = self.category
 		return element
 
 	@classmethod
@@ -39,5 +58,17 @@ class MapMarker(db.Model):
 		name = element.find('name').text
 		longitude = element.find('x_long').text
 		latitude = element.find('y_lat').text
-		instance = MapMarker(data={'name':name, 'x_long':longitude, 'y_lat':latitude})
+		url = element.find('url').text
+		summary = element.find('summary').text
+		adress = element.find('adress').text
+		img_url = element.find('img_url').text
+		category = element.find('category').text
+		instance = MapMarker(data = {'name':name,
+									 'x_long':longitude,
+									 'y_lat':latitude,
+									 'url':url,
+									 'summary':summary,
+									 'adress':adress,
+									 'img_url':img_url,
+									 'category':category})
 		return instance
