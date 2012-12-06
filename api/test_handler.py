@@ -10,7 +10,7 @@ class TestAddHandler(RequestHandler):
         map_marker = MapMarker(data=dict(name=name, x_long=randrange(-180, 180, 0.000001), y_lat=randrange(-180, 180, 0.000001)))
         map_marker.put();
         
-        self.response.write("Enregistré")
+        self.response.write("Enregistre")
 
 class TestListHandler(RequestHandler):
     def get(self):
