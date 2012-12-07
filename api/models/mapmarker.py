@@ -15,13 +15,13 @@ class MapMarker(db.Model):
 	category = db.StringProperty
 
 
-	def __init__(self,data=None):
+	def from_dic(self,data):
 		"""
 		Populates the instance data,
 		using a dictionnary given as a parameter.
 		"""
-		super(MapMarker,self).__init__()
-		if data:
+		# super(MapMarker,self).__init__()
+		# if data:
 			# latitude = data['y_lat']
 			# longitude = data['x_long']
 			# super(MapMarker,self).__init__( name = data['name'],
@@ -31,13 +31,20 @@ class MapMarker(db.Model):
 			# 								adress = data.get('adress', None),
 			# 								img_url = data.get('img_url', None),
 			# 								category = data.get('category', None))
-			self.name = data['name'],
-			self.coordinates = db.GeoPt(lat=latitude, lon=longitude)
-			self.url = data.get('url', None)
-			self.summary = data.get('summary', None)
-			self.adress = data.get('adress', None)
-			self.img_url = data.get('img_url', None)
-			self.category = data.get('category', None)
+		name = data['name'],
+		coordinates = db.GeoPt(lat=latitude, lon=longitude)
+		url = data.get('url', None)
+		summary = data.get('summary', None)
+		adress = data.get('adress', None)
+		img_url = data.get('img_url', None)
+		category = data.get('category', None)
+		return MapMarker(name=name,
+						 coordinates=coordinates,
+						 url=url,
+						 summary=summary,
+						 adress=adress,
+						 img_url=img_url,
+						 category=category)
 
 	def to_element():
 		"""
