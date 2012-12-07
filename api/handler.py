@@ -38,7 +38,7 @@ class ApiHandler(RequestHandler):
     
     def post(self):
         try:
-          map_marker = MapMarker.from_dic(self.request.POST)
+          map_marker = MapMarker(**self.request.POST)
         except KeyError as e:
           self.response.status = 404
           return
