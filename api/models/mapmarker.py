@@ -6,9 +6,9 @@ class MapMarker(db.Model):
 	Models an individual user generated Map Marker.
 	Registers Marker name, coordinates.
 	"""
-	name = db.StringProperty()
-	x_long = db.FloatProperty()
-	y_lat = db.FloatProperty()
+	name = db.StringProperty(required=True)
+	x_long = db.FloatProperty(required=True)
+	y_lat = db.FloatProperty(required=True)
 	url = db.StringProperty()
 	summary = db.StringProperty(multiline=True)
 	adress = db.StringProperty(multiline=True)
