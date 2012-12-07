@@ -14,8 +14,7 @@ class MapMarker(GeoModel):
 	All parameters are single line strings unless noted otherwise.
 
 	name : name of Marker (mandatory)
-	x_long : float - longitude of Marker (mandatory)
-	y_lat : float - latitude of Marker (mandatory)
+	location : GeoPt - coordinates of Marker (mandatory)
 	url : relevant url
 	summary : multiline string - short summary
 	adress : multiline string - adress of the Marker if relevant
