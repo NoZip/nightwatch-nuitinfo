@@ -7,13 +7,13 @@ from api.models.mapmarker import MapMarker
 
 def get_map_markers_by_zone(longitude, latitude, radius, limit=50):
     query = Node.all()
-    query.filter("coordinates.lon >", longitude - radius)
-    query.filter("coordinates.lon <", longitude + radius)
-    query.filter("coordinates.lat >", latitude - radius)
-    query.filter("coordinates.lat <", latitude + radius)
+    query.filter("x_long >", longitude - radius)
+    query.filter("x_long <", longitude + radius)
+    query.filter("y_lat >", latitude - radius)
+    query.filter("y_lat <", latitude + radius)
     
     for map_marker in query.fetch(limit=limit):
-      if ((map_marker.longitude - longitude) ** 2 + (map_marker.latitude - latitude) ** 2 == radius ** 2):
+      if ((map_marker.x_long - longitude) ** 2 + (map_marker.y_lat - latitude) ** 2 == radius ** 2):
           yield map_marker
 
 
@@ -38,10 +38,31 @@ class ApiHandler(RequestHandler):
     
     def post(self):
         try:
-          map_marker = MapMarker(**self.request.POST)
+          name = self.request.POST['name']
+          x_long = self.request.POST['x_long']
+          y_lat = self.request.POST['y_lat']
         except KeyError as e:
           self.response.status = 404
           return
+        
+        map_marker = MapMarker(name=name,
+                               x_long=x_long,
+                               y_lat=y_lat)
+        
+        if self.request.POST['url']:
+            map_marker.url = self.request.POST['url']
+        
+        if self.request.POST['summary']:
+            map_marker.summary = self.request.POST['symmary']
+        
+        if self.request.POST['address']:
+            map_marker.uaddress = self.request.POST['address']
+        
+        if self.request.POST['img_url']:
+            map_marker.img_url = self.request.POST['img_url']
+        
+        if self.request.POST['category']:
+            map_marker.category = self.request.POST['category']
         
         map_marker.put()
         
