@@ -15,7 +15,7 @@ class MapMarker(db.Model):
 	category = db.StringProperty
 
 
-	def from_dic(self,data):
+	def from_dict(self,data):
 		"""
 		Populates the instance data,
 		using a dictionnary given as a parameter.
@@ -46,7 +46,7 @@ class MapMarker(db.Model):
 						 img_url=img_url,
 						 category=category)
 
-	def to_element():
+	def to_element(self):
 		"""
 		Returns an element representation of the instance data.
 		"""
