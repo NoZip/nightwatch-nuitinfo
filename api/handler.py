@@ -12,7 +12,7 @@ class ApiHandler(RequestHandler):
         try:
           longitude = float(self.request.GET['x_long'])
           latitude = float(self.request.GET['y_lat'])
-          radius = self.request.GET['r']
+          radius = float(self.request.GET['r'])
         except KeyError as e:
           self.response.status = 404
           return
@@ -20,12 +20,11 @@ class ApiHandler(RequestHandler):
         limit = self.request.GET.get('limit', 50)
         
         root = ElementTree.Element("root")
-        
-        for map_marker in MapMarker.proximity_fetch(MapMarker.all(),
-                                                    center=db.GeoPt(latitude, longitude),
-                                                    max_distance=radius):
-            root_node.append(map_marker.to_element())
-        
+        result = MapMarker.proximity_fetch(MapMarker.all(),
+                                           center=db.GeoPt(latitude, longitude),
+                                           max_distance=radius)
+        for map_marker in result:
+          root.append(map_marker.to_element())
         self.response.write(ElementTree.tostring(root, encoding="utf-8"))
     
     def post(self):
@@ -39,7 +38,7 @@ class ApiHandler(RequestHandler):
           return
         
         map_marker = MapMarker(name=name,
-                               location=db.GeoPt(lon=x_long, lat=y_lat),
+                               location=db.GeoPt(y_lat, x_long),
                                category=category)
         
         if self.request.POST['url']:
@@ -54,6 +53,7 @@ class ApiHandler(RequestHandler):
         if self.request.POST['img_url']:
             map_marker.img_url = self.request.POST['img_url']
         
+        map_marker.update_location()
         map_marker.put()
         
         self.response.status = 201
@@ -61,6 +61,7 @@ class ApiHandler(RequestHandler):
     def put(self):
         element = ElementTree.fromstring(self.request.body)
         map_marker = MapMarker.from_element(element)
+        map_marker.update_location()
         map_marker.put()
         
         self.response.status = 201
