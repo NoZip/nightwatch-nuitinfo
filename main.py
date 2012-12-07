@@ -12,16 +12,10 @@ jinja_env = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
-
-class FormHandler(webapp2.RequestHandler):
-    def get(self):
-        template = jinja_env.get_template('form.html')
-        self.response.out.write()
+        return self.redirect("http://nightswatch.projets-bx1.fr/")
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/form', FormHandler,
     ('/api', ApiHandler),
     ('/api/add', TestAddHandler),
     ('/api/list', TestListHandler),
