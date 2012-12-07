@@ -1,4 +1,5 @@
 
+import math
 import xml.etree.ElementTree as ElementTree
 
 from webapp2 import RequestHandler
@@ -6,15 +7,16 @@ from webapp2 import RequestHandler
 from api.models.mapmarker import MapMarker
 
 def get_map_markers_by_zone(longitude, latitude, radius, limit=50):
+    delta = (radius / 2 * math.pi * 6.371) * 360
+  
     query = Node.all()
-    query.filter("x_long >", longitude - radius)
-    query.filter("x_long <", longitude + radius)
-    query.filter("y_lat >", latitude - radius)
-    query.filter("y_lat <", latitude + radius)
+    query.filter("x_long >", longitude - delta)
+    query.filter("x_long <", longitude + delta)
+    query.filter("y_lat >", latitude - delta)
+    query.filter("y_lat <", latitude + delta)
     
     for map_marker in query.fetch(limit=limit):
-      if ((map_marker.x_long - longitude) ** 2 + (map_marker.y_lat - latitude) ** 2 == radius ** 2):
-          yield map_marker
+        yield map_marker
 
 
 class ApiHandler(RequestHandler):
