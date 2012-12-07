@@ -1,7 +1,8 @@
 import xml.etree.ElementTree as ET
 from google.appengine.ext import db
+from geo.geomodel import GeoModel
 
-class MapMarker(db.Model):
+class MapMarker(GeoModel):
 	"""
 	Models an individual user generated Map Marker.
 
@@ -23,8 +24,6 @@ class MapMarker(db.Model):
 
 	"""
 	name = db.StringProperty(required=True)
-	x_long = db.FloatProperty(required=True)
-	y_lat = db.FloatProperty(required=True)
 	url = db.StringProperty()
 	summary = db.StringProperty(multiline=True)
 	adress = db.StringProperty(multiline=True)
@@ -37,8 +36,8 @@ class MapMarker(db.Model):
 		"""
 		element = ET.Element('node')
 		ET.SubElement(element,'name').text = self.name
-		ET.SubElement(element,'x_long').text = "{:0.9f}".format(self.x_long)
-		ET.SubElement(element,'y_lat').text = "{:0.9f}".format(self.y_lat)
+		ET.SubElement(element,'x_long').text = "{:0.9f}".format(self.location.lon)
+		ET.SubElement(element,'y_lat').text = "{:0.9f}".format(self.location.lat)
 		ET.SubElement(element,'url').text = self.url
 		ET.SubElement(element,'summary').text = self.summary
 		ET.SubElement(element,'adress').text = self.adress
@@ -61,8 +60,7 @@ class MapMarker(db.Model):
 		img_url = element.find('img_url').text
 		category = element.find('category').text
 		instance = MapMarker(name=name,
-							 x_long=x_long,
-							 y_lat=y_lat,
+							 location=db.GeoPt(y_lat, x_long),
 							 url=url,
 							 summary=summary,
 							 adress=adress,
