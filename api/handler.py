@@ -41,13 +41,15 @@ class ApiHandler(RequestHandler):
           name = self.request.POST['name']
           x_long = self.request.POST['x_long']
           y_lat = self.request.POST['y_lat']
+          category = self.request.POST['category']
         except KeyError as e:
           self.response.status = 404
           return
         
         map_marker = MapMarker(name=name,
                                x_long=x_long,
-                               y_lat=y_lat)
+                               y_lat=y_lat,
+                               category=category)
         
         if self.request.POST['url']:
             map_marker.url = self.request.POST['url']
@@ -60,9 +62,6 @@ class ApiHandler(RequestHandler):
         
         if self.request.POST['img_url']:
             map_marker.img_url = self.request.POST['img_url']
-        
-        if self.request.POST['category']:
-            map_marker.category = self.request.POST['category']
         
         map_marker.put()
         
