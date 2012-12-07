@@ -9,7 +9,7 @@ from api.models.mapmarker import MapMarker
 class TestAddHandler(RequestHandler):
     def get(self):
         map_marker = MapMarker(name="test", x_long=(-180 + random() * 360), y_lat=(-90 + random() * 180))
-        map_marker.put();
+        map_marker.put()
         
         self.response.write("Enregistre")
 

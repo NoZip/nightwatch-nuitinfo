@@ -7,58 +7,22 @@ class MapMarker(db.Model):
 	Registers Marker name, coordinates.
 	"""
 	name = db.StringProperty()
-	coordinates = db.GeoPtProperty()
+	x_long = db.FloatProperty()
+	y_lat = db.FloatProperty()
 	url = db.StringProperty()
 	summary = db.StringProperty(multiline=True)
 	adress = db.StringProperty(multiline=True)
-	img_url = db.StringProperty
-	category = db.StringProperty
-
-
-	def from_dict(self,data):
-		"""
-		Populates the instance data,
-		using a dictionnary given as a parameter.
-		"""
-		# super(MapMarker,self).__init__()
-		# if data:
-			# latitude = data['y_lat']
-			# longitude = data['x_long']
-			# super(MapMarker,self).__init__( name = data['name'],
-			# 								coordinates = db.GeoPt(lat=latitude, lon=longitude),
-			# 								url = data.get('url', None),
-			# 								summary = data.get('summary', None),
-			# 								adress = data.get('adress', None),
-			# 								img_url = data.get('img_url', None),
-			# 								category = data.get('category', None))
-		name = data['name'],
-		latitude = data['y_lat']
-		longitude = data['x_long']
-		coordinates = db.GeoPt(lat=latitude, lon=longitude)
-		url = data.get('url', None)
-		summary = data.get('summary', None)
-		adress = data.get('adress', None)
-		img_url = data.get('img_url', None)
-		category = data.get('category', None)
-		return MapMarker(name=name,
-						 coordinates=coordinates,
-						 url=url,
-						 summary=summary,
-						 adress=adress,
-						 img_url=img_url,
-						 category=category)
+	img_url = db.StringProperty()
+	category = db.StringProperty()
 
 	def to_element(self):
 		"""
 		Returns an element representation of the instance data.
 		"""
-		element = ET.Element('Marker')
+		element = ET.Element('node')
 		ET.SubElement(element,'name').text = self.name
-		ET.SubElement(element,'x_long').text = str(self.coordinates.lon)
-		ET.SubElement(element,'y_lat').text = str(self.coordinates.lat)
-		# for key, prop in self.properties().iteritems():
-		# 	if prop and key not in ('name','coordinates'):
-		# 		ET.SubElement(element, str(key)).text = prop
+		ET.SubElement(element,'x_long').text = "{:0.9f}".format(self.x_long)
+		ET.SubElement(element,'y_lat').text = "{:0.9f}".format(self.y_lat)
 		ET.SubElement(element,'url').text = self.url
 		ET.SubElement(element,'summary').text = self.summary
 		ET.SubElement(element,'adress').text = self.adress
@@ -73,19 +37,19 @@ class MapMarker(db.Model):
 		taking an element as a parameter.
 		"""
 		name = element.find('name').text
-		longitude = element.find('x_long').text
-		latitude = element.find('y_lat').text
+		x_long = float(element.find('x_long').text)
+		y_lat = float(element.find('y_lat').text)
 		url = element.find('url').text
 		summary = element.find('summary').text
 		adress = element.find('adress').text
 		img_url = element.find('img_url').text
 		category = element.find('category').text
-		instance = MapMarker(data = {'name':name,
-									 'x_long':longitude,
-									 'y_lat':latitude,
-									 'url':url,
-									 'summary':summary,
-									 'adress':adress,
-									 'img_url':img_url,
-									 'category':category})
+		instance = MapMarker(name=name,
+							 x_long=x_long,
+							 y_lat=y_lat,
+							 url=url,
+							 summary=summary,
+							 adress=adress,
+							 img_url=img_url,
+							 category=category)
 		return instance
