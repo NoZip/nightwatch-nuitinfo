@@ -20,16 +20,24 @@ class MapMarker(db.Model):
 		Populates the instance data,
 		using a dictionnary given as a parameter.
 		"""
+		super(MapMarker,self).__init__()
 		if data:
-			latitude = data['y_lat']
-			longitude = data['x_long']
-			super(MapMarker,self).__init__( name = data['name'],
-											coordinates = db.GeoPt(lat=latitude, lon=longitude),
-											url = data.get('url', None),
-											summary = data.get('summary', None),
-											adress = data.get('adress', None),
-											img_url = data.get('img_url', None),
-											category = data.get('category', None))
+			# latitude = data['y_lat']
+			# longitude = data['x_long']
+			# super(MapMarker,self).__init__( name = data['name'],
+			# 								coordinates = db.GeoPt(lat=latitude, lon=longitude),
+			# 								url = data.get('url', None),
+			# 								summary = data.get('summary', None),
+			# 								adress = data.get('adress', None),
+			# 								img_url = data.get('img_url', None),
+			# 								category = data.get('category', None))
+			self.name = data['name'],
+			self.coordinates = db.GeoPt(lat=latitude, lon=longitude)
+			self.url = data.get('url', None)
+			self.summary = data.get('summary', None)
+			self.adress = data.get('adress', None)
+			self.img_url = data.get('img_url', None)
+			self.category = data.get('category', None)
 
 	def to_element():
 		"""
@@ -39,14 +47,14 @@ class MapMarker(db.Model):
 		ET.SubElement(element,'name').text = self.name
 		ET.SubElement(element,'x_long').text = self.coordinates.lon
 		ET.SubElement(element,'y_lat').text = self.coordinates.lat
-		for key, prop in self.properties().iteritems():
-			if prop and key not in ('name','coordinates'):
-				ET.SubElement(element, str(key)).text = prop
-			# ET.SubElement(element,'url').text = self.url
-			# ET.SubElement(element,'summary').text = self.summary
-			# ET.SubElement(element,'adress').text = self.adress
-			# ET.SubElement(element,'img_url').text = self.img_url
-			# ET.SubElement(element,'category').text = self.category
+		# for key, prop in self.properties().iteritems():
+		# 	if prop and key not in ('name','coordinates'):
+		# 		ET.SubElement(element, str(key)).text = prop
+		ET.SubElement(element,'url').text = self.url
+		ET.SubElement(element,'summary').text = self.summary
+		ET.SubElement(element,'adress').text = self.adress
+		ET.SubElement(element,'img_url').text = self.img_url
+		ET.SubElement(element,'category').text = self.category
 		return element
 
 	@classmethod
