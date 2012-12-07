@@ -4,7 +4,23 @@ from google.appengine.ext import db
 class MapMarker(db.Model):
 	"""
 	Models an individual user generated Map Marker.
-	Registers Marker name, coordinates.
+
+	Registers Marker name and coordinates.
+	Optionnaly registers additional information.
+
+	MapMarker(**kwargs)
+
+	All parameters are single line strings unless noted otherwise.
+
+	name : name of Marker (mandatory)
+	x_long : float - longitude of Marker (mandatory)
+	y_lat : float - latitude of Marker (mandatory)
+	url : relevant url
+	summary : multiline string - short summary
+	adress : multiline string - adress of the Marker if relevant
+	img_url : associated image url
+	category : category of Marker (eg. 'restaurant', 'accomodation', etc.)
+
 	"""
 	name = db.StringProperty(required=True)
 	x_long = db.FloatProperty(required=True)
