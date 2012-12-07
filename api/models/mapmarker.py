@@ -32,6 +32,8 @@ class MapMarker(db.Model):
 			# 								img_url = data.get('img_url', None),
 			# 								category = data.get('category', None))
 		name = data['name'],
+		latitude = data['y_lat']
+		longitude = data['x_long']
 		coordinates = db.GeoPt(lat=latitude, lon=longitude)
 		url = data.get('url', None)
 		summary = data.get('summary', None)
@@ -52,8 +54,8 @@ class MapMarker(db.Model):
 		"""
 		element = ET.Element('Marker')
 		ET.SubElement(element,'name').text = self.name
-		ET.SubElement(element,'x_long').text = self.coordinates.lon
-		ET.SubElement(element,'y_lat').text = self.coordinates.lat
+		ET.SubElement(element,'x_long').text = str(self.coordinates.lon)
+		ET.SubElement(element,'y_lat').text = str(self.coordinates.lat)
 		# for key, prop in self.properties().iteritems():
 		# 	if prop and key not in ('name','coordinates'):
 		# 		ET.SubElement(element, str(key)).text = prop
