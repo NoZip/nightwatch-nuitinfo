@@ -1,24 +1,25 @@
-from random import randrange
+from random import random
 import xml.etree.ElementTree as ElementTree
 
 from webapp2 import RequestHandler
 
 from api.models.mapmarker import MapMarker
 
+
 class TestAddHandler(RequestHandler):
-    def get(self, name):
-        map_marker = MapMarker(data=dict(name=name, x_long=randrange(-180, 180, 0.000001), y_lat=randrange(-180, 180, 0.000001)))
+    def get(self):
+        map_marker = MapMarker(dict(name="test", x_long=-180 + random() * 360, y_lat=-90 + random() * 180))
         map_marker.put();
         
         self.response.write("Enregistre")
 
 class TestListHandler(RequestHandler):
     def get(self):
-        query = Node.all()
+        query = MapMarker.all()
         
         root = ElementTree.Element("root")
         
         for map_marker in query.fetch(limit=50):
-            root_node.append(map_marker.to_element())
+            root.append(map_marker.to_element())
         
         self.response.write(ElementTree.tostring(root, encoding="utf-8"))

@@ -7,10 +7,10 @@ from api.models.mapmarker import MapMarker
 
 def get_map_markers_by_zone(longitude, latitude, radius, limit=50):
     query = Node.all()
-    query.filter("longitude >", longitude - radius)
-    query.filter("longitude <", longitude + radius)
-    query.filter("latitude >", latitude - radius)
-    query.filter("latitude <", latitude + radius)
+    query.filter("coordinates.lon >", longitude - radius)
+    query.filter("coordinates.lon <", longitude + radius)
+    query.filter("coordinates.lat >", latitude - radius)
+    query.filter("coordinates.lat <", latitude + radius)
     
     for map_marker in query.fetch(limit=limit):
       if ((map_marker.longitude - longitude) ** 2 + (map_marker.latitude - latitude) ** 2 == radius ** 2):
@@ -20,9 +20,9 @@ def get_map_markers_by_zone(longitude, latitude, radius, limit=50):
 class ApiHandler(RequestHandler):
     def get(self):
         try:
-          longitude = self.request.GET['longitude']
-          latitude = self.request.GET['latitude']
-          radius = self.request.GET['radius']
+          longitude = self.request.GET['x_lon']
+          latitude = self.request.GET['y_lat']
+          radius = self.request.GET['r']
         except KeyError as e:
           self.response.status = 404
           return
@@ -38,7 +38,7 @@ class ApiHandler(RequestHandler):
     
     def post(self):
         try:
-          map_marker = MapMarker(self.request.POST)
+          map_marker = MapMarker.from_dic(self.request.POST)
         except KeyError as e:
           self.response.status = 404
           return
